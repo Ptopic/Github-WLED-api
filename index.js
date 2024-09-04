@@ -11,6 +11,7 @@ app.get('/check-merge/:organization/:repo/:prId', async (req, res) => {
 	const githubToken = process.env.GITHUB_TOKEN;
 	const haToken = process.env.HA_TOKEN;
 	const webhookUrl = process.env.PR_MERGED_WEBHOOK;
+	const resetLightsWebhookUrl = process.env.RESET_LIGHTS_WEBHOOK;
 
 	try {
 		const response = await axios.get(
@@ -29,6 +30,26 @@ app.get('/check-merge/:organization/:repo/:prId', async (req, res) => {
 						Authorization: `Bearer ${haToken}`,
 					},
 				});
+
+				setTimeout(async () => {
+					try {
+						await axios.post(resetLightsWebhookUrl, {
+							headers: {
+								Authorization: `Bearer ${haToken}`,
+							},
+						});
+					} catch (error) {
+						console.error(
+							'Error triggering Home Assistant webhook:',
+							error.message
+						);
+						return res.status(500).json({
+							stop: true,
+							error: 'Failed to trigger Home Assistant webhook.',
+						});
+					}
+				}, 5000);
+
 				return res
 					.status(200)
 					.json({ stop: true, message: 'PR merged, webhook triggered.' });
@@ -37,12 +58,10 @@ app.get('/check-merge/:organization/:repo/:prId', async (req, res) => {
 					'Error triggering Home Assistant webhook:',
 					error.message
 				);
-				return res
-					.status(500)
-					.json({
-						stop: true,
-						error: 'Failed to trigger Home Assistant webhook.',
-					});
+				return res.status(500).json({
+					stop: true,
+					error: 'Failed to trigger Home Assistant webhook.',
+				});
 			}
 		}
 	} catch (error) {
