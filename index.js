@@ -4,7 +4,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const port = 3000;
+const port = 3002;
 
 app.get('/check-merge/:organization/:repo/:prId', async (req, res) => {
 	const { organization, repo, prId } = req.params;
