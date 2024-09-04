@@ -48,7 +48,7 @@ app.get('/check-merge/:organization/:repo/:prId', async (req, res) => {
 							error: 'Failed to trigger Home Assistant webhook.',
 						});
 					}
-				}, 5000);
+				}, 10000);
 
 				return res
 					.status(200)
