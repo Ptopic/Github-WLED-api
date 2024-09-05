@@ -11,7 +11,7 @@ const resetLights = () => {
 				Authorization: `Bearer ${haToken}`,
 			},
 		});
-	}, 20000);
+	}, 30000);
 };
 
 module.exports = { resetLights };
