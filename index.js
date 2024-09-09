@@ -8,8 +8,15 @@ require('dotenv').config();
 const app = express();
 const port = 3002;
 
-app.get('/check-merge/:organization/:repo/:prId', async (req, res) => {
-	const { organization, repo, prId } = req.params;
+app.get('/check-merge', async (req, res) => {
+	const { url } = req.query;
+
+	const urlParams = url.split('/');
+
+	const organization = urlParams[3];
+	const repo = urlParams[4];
+	const prId = urlParams[6];
+
 	const githubToken = process.env.GITHUB_TOKEN;
 	const haToken = process.env.HA_TOKEN;
 	const mergedWebhookUrl = process.env.PR_MERGED_WEBHOOK;
@@ -47,8 +54,15 @@ app.get('/check-merge/:organization/:repo/:prId', async (req, res) => {
 	}
 });
 
-app.get('/check-comments/:organization/:repo/:prId', async (req, res) => {
-	const { organization, repo, prId } = req.params;
+app.get('/check-comments', async (req, res) => {
+	const { url } = req.query;
+
+	const urlParams = url.split('/');
+
+	const organization = urlParams[3];
+	const repo = urlParams[4];
+	const prId = urlParams[6];
+
 	const githubToken = process.env.GITHUB_TOKEN;
 	const haToken = process.env.HA_TOKEN;
 
@@ -152,8 +166,15 @@ app.get('/check-comments/:organization/:repo/:prId', async (req, res) => {
 	}
 });
 
-app.get('/check-build/:organization/:repo/:prId', async (req, res) => {
-	const { organization, repo, prId } = req.params;
+app.get('/check-build', async (req, res) => {
+	const { url } = req.query;
+
+	const urlParams = url.split('/');
+
+	const organization = urlParams[3];
+	const repo = urlParams[4];
+	const prId = urlParams[6];
+
 	const githubToken = process.env.GITHUB_TOKEN;
 	const haToken = process.env.HA_TOKEN;
 
